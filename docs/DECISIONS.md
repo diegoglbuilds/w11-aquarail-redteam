@@ -56,3 +56,16 @@ Run a short operator review with the fictional Laura Mendoza persona. Ask whethe
 - Regression test: an old ticket with a recent update no longer has the stale flag, while its missing-owner flag remains.
 - Remaining risks: evidence changes are local and operator-entered, so they are not independently authenticated; browser-local records are not a production audit store. No production browser behavior was verified.
 - Next session first move: persona test.
+
+## Persona Test — Post Mechanical Fix
+
+- Synthetic persona: Laura Mendoza, fictional/synthetic municipal water-utility operations supervisor, age 41.
+- Testing method: source-level synthetic walkthrough of the React view, user-facing copy, schemas, scoring, adversarial checks, state transitions, and regression tests. No real user research was conducted.
+- Browser/screenshot limitation: browser automation unavailable; no screenshots or production visual verification available. No clicks or visual observations are claimed.
+- Worst confusion: editable evidence booleans could be mistaken for attached or authenticated proof, allowing “Resultado verificado” to sound stronger than what this local demo establishes.
+- Design decision: clarify evidence provenance directly beside the existing evidence controls; keep the current human evidence gate and status flow without adding upload or workflow features.
+- Exact fix: add copy that the demo does not attach or authenticate evidence and that human review of evidence outside the tool is required. Add a UI regression assertion for this disclosure.
+- Re-test result: source walkthrough confirms the disclosure is adjacent to the four evidence declarations; outcome verification remains limited to repaired plus all evidence booleans, and rejected attempts remain blocked. Regression test added. No browser behavior was asserted.
+- Spreadsheet comparison: AquaRail adds deterministic ranking comparison and adversarial/state checks; spreadsheets remain simpler and can surface unresolved tickets with filters. The prototype has extra navigation and no demonstrated speed advantage. See `docs/PERSONA.md` for detailed comparison.
+- Remaining risk: evidence is still locally declared and unauthenticated; no attachments, operator identity, or durable shared audit history exist. Scoring weights and bias threshold need local review.
+- Next session first move: final deploy verification and submission artifacts.
