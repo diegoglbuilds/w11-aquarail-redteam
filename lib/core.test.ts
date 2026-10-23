@@ -29,6 +29,7 @@ describe("adversarial checks",()=>{
   it("flags missing owner",()=>expect(unresolvedFlags({...base,owner:null},new Date(base.createdAt))).toContain("Sin responsable"));
   it("flags missing next action",()=>expect(unresolvedFlags({...base,nextAction:null},new Date(base.createdAt))).toContain("Sin siguiente acción"));
   it("uses a 24-hour stale-ticket threshold",()=>{const fresh=unresolvedFlags(base,new Date(Date.parse(base.createdAt)+STALE_AFTER_HOURS*3600000));const stale=unresolvedFlags(base,new Date(Date.parse(base.createdAt)+(STALE_AFTER_HOURS*3600000)+1));expect(fresh).not.toContain("Ticket estancado");expect(stale).toContain("Ticket estancado")});
+  it("resets staleness after an operator update without hiding missing fields",()=>{const recentlyUpdated={...base,createdAt:"2026-10-20T12:00:00.000Z",lastUpdated:"2026-10-23T11:30:00.000Z",owner:null};const flags=unresolvedFlags(recentlyUpdated,new Date("2026-10-23T12:00:00.000Z"));expect(flags).toContain("Sin responsable");expect(flags).not.toContain("Ticket estancado")});
 });
 
 describe("verified outcome state machine and human overrides",()=>{

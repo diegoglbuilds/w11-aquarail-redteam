@@ -44,3 +44,15 @@
 ## Tomorrow’s first move
 
 Run a short operator review with the fictional Laura Mendoza persona. Ask whether she can explain each ranking change and distinguish suspected, physically confirmed, repaired, and outcome-verified events; record confusion before tuning any weights.
+
+## Mechanical Test — Post Deploy #1
+
+- Testing method: source review against `docs/PACKET.md` plus Vitest regression coverage; no browser interaction or production requests were represented as performed.
+- Browser automation available: no.
+- Production browser verification available: no.
+- Real bug found: unresolved-ticket staleness was measured from `createdAt` rather than `lastUpdated`, so a recently updated, still-open ticket continued to appear stale.
+- Why it mattered: the stale flag overstated inactivity and could mislead an operator about whether a ticket had received attention. Missing owner and next-action flags must remain visible independently.
+- Fix applied: calculate the 24-hour stale threshold from `lastUpdated`; terminal verified states remain excluded as before.
+- Regression test: an old ticket with a recent update no longer has the stale flag, while its missing-owner flag remains.
+- Remaining risks: evidence changes are local and operator-entered, so they are not independently authenticated; browser-local records are not a production audit store. No production browser behavior was verified.
+- Next session first move: persona test.

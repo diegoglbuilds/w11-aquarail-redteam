@@ -7,7 +7,7 @@ export function unresolvedFlags(event: LeakEvent, now = new Date()): UnresolvedF
   const flags: UnresolvedFlag[] = [];
   if (!event.owner) flags.push("Sin responsable");
   if (!event.nextAction) flags.push("Sin siguiente acción");
-  if (now.getTime() - Date.parse(event.createdAt) > STALE_AFTER_HOURS * 60 * 60 * 1000 && event.status !== "outcome_verified" && event.status !== "verified_not_leak") flags.push("Ticket estancado");
+  if (now.getTime() - Date.parse(event.lastUpdated) > STALE_AFTER_HOURS * 60 * 60 * 1000 && event.status !== "outcome_verified" && event.status !== "verified_not_leak") flags.push("Ticket estancado");
   return flags;
 }
 
