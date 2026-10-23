@@ -17,6 +17,7 @@ export const LeakEventSchema = z.object({
   owner: z.string().min(2).max(60).nullable(),
   nextAction: z.string().min(3).max(200).nullable(),
   status: LeakStatusSchema,
+  resolutionRecord: z.string().max(300).nullable(),
 }).strict();
 export type LeakEvent = z.infer<typeof LeakEventSchema>;
 
