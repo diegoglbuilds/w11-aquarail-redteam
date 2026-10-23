@@ -14,6 +14,7 @@ export const LeakEventSchema = z.object({
   communityVulnerabilityScore: z.number().min(0).max(100),
   sensorConfidence: z.number().min(0).max(1),
   createdAt: z.string().datetime(),
+  lastUpdated: z.string().datetime(),
   owner: z.string().min(2).max(60).nullable(),
   nextAction: z.string().min(3).max(200).nullable(),
   status: LeakStatusSchema,
@@ -32,3 +33,10 @@ export type Evidence = z.infer<typeof EvidenceSchema>;
 export const OverrideReasonSchema = z.string().trim().min(12, "Explica el motivo en al menos 12 caracteres.").max(240, "El motivo no puede superar 240 caracteres.");
 export const PriorityOverrideSchema = z.object({ eventId: z.string(), previousPriority: z.number().int().positive(), newPriority: z.number().int().positive(), reason: OverrideReasonSchema, timestamp: z.string().datetime() }).strict();
 export type PriorityOverride = z.infer<typeof PriorityOverrideSchema>;
+
+export const LocalDemoStateSchema = z.object({
+  events: z.array(LeakEventSchema),
+  evidence: z.record(EvidenceSchema),
+  overrides: z.array(PriorityOverrideSchema),
+  falseSuccessAttempts: z.array(z.string()),
+}).strict();

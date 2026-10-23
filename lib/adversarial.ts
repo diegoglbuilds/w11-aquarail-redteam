@@ -13,15 +13,15 @@ export function unresolvedFlags(event: LeakEvent, now = new Date()): UnresolvedF
 
 export type BiasFlag = { eventId: string; label: "Posible sesgo de priorización"; explanation: string; delayedBy: number };
 export function findBiasFlags(events: LeakEvent[]): BiasFlag[] {
-  const equityOrder = [...events].sort((a,b)=>equityAwareScore(b)-equityAwareScore(a)||a.id.localeCompare(b.id));
   return events.flatMap((vulnerable) => {
     if (vulnerable.communityVulnerabilityScore < 75) return [];
-    const vulnerableRank = equityOrder.findIndex(e=>e.id===vulnerable.id);
-    const delayed = equityOrder.slice(vulnerableRank+1).filter((lower) =>
+    const delayed = events.filter((lower) =>
+      lower.id !== vulnerable.id &&
+      equityAwareScore(lower) > equityAwareScore(vulnerable) &&
       lower.communityVulnerabilityScore < vulnerable.communityVulnerabilityScore &&
-      baselineScore(lower) - baselineScore(vulnerable) < 20
+      baselineScore(lower) - baselineScore(vulnerable) < 40
     );
     if (delayed.length < 2) return [];
-    return [{eventId:vulnerable.id,label:"Posible sesgo de priorización" as const,delayedBy:delayed.length,explanation:`${vulnerable.id} tiene vulnerabilidad ${vulnerable.communityVulnerabilityScore}/100 y queda detrás de ${delayed.length} eventos menos vulnerables. La diferencia de pérdida/factibilidad frente a esos casos no supera el umbral explicativo de 20 puntos base; requiere revisión humana.`}];
+    return [{eventId:vulnerable.id,label:"Posible sesgo de priorización" as const,delayedBy:delayed.length,explanation:`${vulnerable.id} tiene vulnerabilidad ${vulnerable.communityVulnerabilityScore}/100 y queda detrás de ${delayed.length} eventos menos vulnerables. La diferencia de pérdida/factibilidad frente a esos casos no supera el umbral explicativo de 40 puntos base; requiere revisión humana.`}];
   });
 }
